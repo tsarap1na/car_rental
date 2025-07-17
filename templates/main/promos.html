@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title %}Promotions - Car Rental{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'main:home' %}">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Promotions</li>
+        </ol>
+    </nav>
+
+    <h1 class="display-4 mb-4">Current Promotions</h1>
+
+    {% if promos %}
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            {% for promo in promos %}
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <h2 class="card-title h4">{{ promo.code }}</h2>
+                                <span class="badge bg-primary">{{ promo.discount_amount }}% OFF</span>
+                            </div>
+                            <p class="card-text">{{ promo.description }}</p>
+                            <div class="text-muted small">
+                                <p class="mb-1">
+                                    <strong>Valid from:</strong> {{ promo.valid_from|date:"F d, Y" }}
+                                </p>
+                                <p class="mb-0">
+                                    <strong>Valid until:</strong> {{ promo.valid_until|date:"F d, Y" }}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <button class="btn btn-outline-primary btn-sm" onclick="copyPromoCode('{{ promo.code }}')">
+                                <i class="fas fa-copy"></i> Copy Code
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            <h4 class="alert-heading">No Active Promotions</h4>
+            <p>There are currently no active promotional offers. Please check back later for new deals!</p>
+        </div>
+    {% endif %}
+
+    {% if user.is_staff %}
+        <div class="mt-4">
+            <a href="{% url 'admin:main_promo_add' %}" class="btn btn-success">
+                <i class="fas fa-plus"></i> Add New Promotion
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function copyPromoCode(code) {
+    navigator.clipboard.writeText(code).then(function() {
+        alert('Promo code copied to clipboard!');
+    }).catch(function(err) {
+        console.error('Failed to copy text: ', err);
+    });
+}
+</script>
+{% endblock %} 

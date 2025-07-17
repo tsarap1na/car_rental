@@ -1,0 +1,94 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}{% if rental %}Update Rental{% else %}Create New Rental{% endif %}{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">{% if rental %}Update Rental #{{ rental.id }}{% else %}Create New Rental{% endif %}</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+
+                        {% if form.errors %}
+                        <div class="alert alert-danger">
+                            <strong>Please correct the following errors:</strong>
+                            {{ form.errors }}
+                        </div>
+                        {% endif %}
+
+                        {% if not rental %}
+                        <div class="mb-3">
+                            <label for="client" class="form-label">Client</label>
+                            <select name="client" id="client" class="form-select" required>
+                                <option value="">Select a client...</option>
+                                {% for client in clients %}
+                                <option value="{{ client.id }}" {% if request.GET.client == client.id|stringformat:"s" %}selected{% endif %}>
+                                    {{ client.user.get_full_name }} ({{ client.phone }})
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.car.id_for_label }}" class="form-label">Car</label>
+                            {{ form.car }}
+                            {% if form.car.errors %}
+                            <div class="invalid-feedback d-block">{{ form.car.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.days.id_for_label }}" class="form-label">Rental Duration (days)</label>
+                            {{ form.days }}
+                            {% if form.days.errors %}
+                            <div class="invalid-feedback d-block">{{ form.days.errors }}</div>
+                            {% endif %}
+                        </div>
+                        {% else %}
+                        <div class="mb-3">
+                            <label for="{{ form.status.id_for_label }}" class="form-label">Status</label>
+                            {{ form.status }}
+                            {% if form.status.errors %}
+                            <div class="invalid-feedback d-block">{{ form.status.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.actual_return_date.id_for_label }}" class="form-label">Actual Return Date</label>
+                            {{ form.actual_return_date }}
+                            {% if form.actual_return_date.errors %}
+                            <div class="invalid-feedback d-block">{{ form.actual_return_date.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.penalties.id_for_label }}" class="form-label">Penalties</label>
+                            {{ form.penalties }}
+                            {% if form.penalties.errors %}
+                            <div class="invalid-feedback d-block">{{ form.penalties.errors }}</div>
+                            {% endif %}
+                            <div class="form-text">Hold Ctrl (Windows) or Command (Mac) to select multiple penalties.</div>
+                        </div>
+                        {% endif %}
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                {% if rental %}Update Rental{% else %}Create Rental{% endif %}
+                            </button>
+                            <a href="{% if rental %}{% url 'main:employee_rental_update' rental.id %}{% else %}{% url 'main:employee_rentals' %}{% endif %}" class="btn btn-outline-secondary">
+                                Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

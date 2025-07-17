@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block title %}My Rentals - Car Rental{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>{% if user.is_staff %}All Rentals{% else %}My Rentals{% endif %}</h1>
+
+    <div class="row">
+        <div class="col-12">
+            {% if rentals %}
+                <div class="list-group">
+                    {% for rental in rentals %}
+                        <div class="list-group-item">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">{{ rental.car.model }}</h5>
+                                <small class="text-muted">{{ rental.start_date|date:"d/m/Y" }}</small>
+                            </div>
+                            <p class="mb-1">
+                                <strong>License Plate:</strong> {{ rental.car.license_plate }}<br>
+                                <strong>Duration:</strong> {{ rental.days }} days<br>
+                                <strong>Total Amount:</strong> ${{ rental.final_amount }}<br>
+                                <strong>Status:</strong>
+                                {% if rental.status == 'active' %}
+                                    <span class="badge bg-primary">Active</span>
+                                {% elif rental.status == 'completed' %}
+                                    <span class="badge bg-success">Completed</span>
+                                {% else %}
+                                    <span class="badge bg-danger">Cancelled</span>
+                                {% endif %}
+                            </p>
+                            {% if user.is_staff %}
+                                <p class="mb-1">
+                                    <strong>Client:</strong> {{ rental.client.user.get_full_name }}
+                                    ({{ rental.client.phone }})
+                                </p>
+                            {% endif %}
+                            <a href="{% url 'main:rental_detail' rental.pk %}" class="btn btn-sm btn-primary">View Details</a>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                {% if is_paginated %}
+                    <nav class="mt-4">
+                        <ul class="pagination justify-content-center">
+                            {% if page_obj.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=1">First</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                                </li>
+                            {% endif %}
+
+                            {% for num in page_obj.paginator.page_range %}
+                                {% if page_obj.number == num %}
+                                    <li class="page-item active">
+                                        <span class="page-link">{{ num }}</span>
+                                    </li>
+                                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if page_obj.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                {% endif %}
+            {% else %}
+                <div class="alert alert-info">
+                    No rentals found.
+                    {% if not user.is_staff %}
+                        <a href="{% url 'main:car_list' %}" class="alert-link">Browse cars to rent</a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %} 

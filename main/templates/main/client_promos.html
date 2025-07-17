@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Доступные промокоды - Car Rental{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Доступные промокоды</h2>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for promo in promos %}
+        <div class="col">
+            <div class="card h-100 {% if promo.is_special %}border-primary{% endif %}">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <h5 class="card-title">{{ promo.name }}</h5>
+                        <span class="badge bg-primary">-{{ promo.discount_percent }}%</span>
+                    </div>
+                    <p class="card-text">{{ promo.description }}</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-muted">
+                            Действует до {{ promo.valid_until|date:"d.m.Y" }}
+                        </small>
+                        <button class="btn btn-sm btn-outline-primary copy-code" data-code="{{ promo.code }}">
+                            Код: {{ promo.code }}
+                        </button>
+                    </div>
+                    {% if promo.min_rental_days %}
+                    <div class="mt-2">
+                        <small class="text-muted">
+                            Минимальный срок аренды: {{ promo.min_rental_days }} дней
+                        </small>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info">
+                В данный момент нет доступных промокодов. Следите за обновлениями!
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const copyButtons = document.querySelectorAll('.copy-code');
+    copyButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const code = this.dataset.code;
+            navigator.clipboard.writeText(code).then(() => {
+                const originalText = this.innerHTML;
+                this.innerHTML = 'Скопировано!';
+                this.classList.remove('btn-outline-primary');
+                this.classList.add('btn-success');
+                setTimeout(() => {
+                    this.innerHTML = originalText;
+                    this.classList.remove('btn-success');
+                    this.classList.add('btn-outline-primary');
+                }, 2000);
+            });
+        });
+    });
+});
+</script>
+{% endblock %}
+{% endblock %} 

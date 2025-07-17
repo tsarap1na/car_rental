@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Автомобили - Car Rental{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="row">
+        <!-- Фильтры -->
+        <div class="col-md-3">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Фильтры</h5>
+                    <form method="get">
+                        <div class="mb-3">
+                            <label class="form-label">Категория</label>
+                            <select name="type" class="form-select">
+                                <option value="">Все категории</option>
+                                {% for type in car_types %}
+                                <option value="{{ type.id }}" {% if request.GET.type == type.id|stringformat:"s" %}selected{% endif %}>{{ type.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Сортировка по цене</label>
+                            <select name="sort" class="form-select">
+                                <option value="">По умолчанию</option>
+                                <option value="price_asc" {% if request.GET.sort == 'price_asc' %}selected{% endif %}>По возрастанию цены</option>
+                                <option value="price_desc" {% if request.GET.sort == 'price_desc' %}selected{% endif %}>По убыванию цены</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Применить</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Список машин -->
+        <div class="col-md-9">
+            <!-- Кнопки управления только для staff -->
+            {% if request.user.is_staff %}
+            <div class="mb-4">
+                <div class="btn-group">
+                    <a href="{% url 'main:car_create' %}" class="btn btn-success">
+                        <i class="fas fa-plus"></i> Добавить автомобиль
+                    </a>
+                    <a href="{% url 'main:car_model_create' %}" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Добавить модель
+                    </a>
+                    <a href="{% url 'main:car_type_create' %}" class="btn btn-info">
+                        <i class="fas fa-plus"></i> Добавить тип
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Список автомобилей -->
+            <div class="row">
+                {% for car in cars %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        {% if car.image %}
+                        <img src="{{ car.image.url }}" class="card-img-top" alt="{{ car.model.name }}" style="height: 200px; object-fit: cover;">
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ car.model.name }}</h5>
+                            <p class="card-text">{{ car.model.car_type.name }}</p>
+                            <p class="card-text">${{ car.daily_rate }}/день</p>
+                            
+                            <!-- Основные кнопки -->
+                            <div class="btn-group w-100">
+                                <a href="{% url 'main:car_detail' car.pk %}" class="btn btn-outline-primary">Подробнее</a>
+                                {% if request.user.is_authenticated and car.is_available %}
+                                <a href="{% url 'main:rental_create' %}?car={{ car.id }}" class="btn btn-primary">Арендовать</a>
+                                {% endif %}
+                            </div>
+
+                            <!-- Кнопки управления только для staff -->
+                            {% if request.user.is_staff %}
+                            <div class="btn-group w-100 mt-2">
+                                <a href="{% url 'main:car_update' car.pk %}" class="btn btn-warning">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="{% url 'main:car_delete' car.pk %}" class="btn btn-danger">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,22 @@
+{% if user.is_staff or user.employee %}
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="staffDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        Управление
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="staffDropdown">
+        <li><a class="dropdown-item" href="{% url 'main:car_list' %}">
+            <i class="fas fa-car"></i> Управление автомобилями
+        </a></li>
+        <li><a class="dropdown-item" href="{% url 'main:employee_clients' %}">
+            <i class="fas fa-users"></i> Управление клиентами
+        </a></li>
+        <li><a class="dropdown-item" href="{% url 'main:employee_rentals' %}">
+            <i class="fas fa-clipboard-list"></i> Управление арендой
+        </a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item" href="{% url 'main:statistics' %}">
+            <i class="fas fa-chart-bar"></i> Статистика
+        </a></li>
+    </ul>
+</li>
+{% endif %} 

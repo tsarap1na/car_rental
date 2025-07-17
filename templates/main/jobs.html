@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block title %}Job Vacancies - Car Rental{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'main:home' %}">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Job Vacancies</li>
+        </ol>
+    </nav>
+
+    <div class="row mb-4">
+        <div class="col-lg-8">
+            <h1 class="display-4">Job Vacancies</h1>
+            <p class="lead">Join our team and be part of our success story!</p>
+        </div>
+        {% if user.is_staff %}
+            <div class="col-lg-4 text-end">
+                <a href="{% url 'admin:main_jobvacancy_add' %}" class="btn btn-success">
+                    <i class="fas fa-plus"></i> Add New Vacancy
+                </a>
+            </div>
+        {% endif %}
+    </div>
+
+    {% if vacancies %}
+        <div class="row">
+            {% for vacancy in vacancies %}
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <h2 class="card-title h4">{{ vacancy.title }}</h2>
+                                <span class="badge bg-primary">{{ vacancy.salary_range }}</span>
+                            </div>
+                            
+                            <h3 class="h6">Job Description</h3>
+                            <p class="card-text">{{ vacancy.description|linebreaks }}</p>
+                            
+                            <h3 class="h6">Requirements</h3>
+                            <p class="card-text">{{ vacancy.requirements|linebreaks }}</p>
+
+                            <div class="text-muted small mb-3">
+                                Posted on {{ vacancy.created_at|date:"F d, Y" }}
+                            </div>
+
+                           
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        {% if is_paginated %}
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1">&laquo; First</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                        </li>
+                    {% endif %}
+
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                            <li class="page-item active">
+                                <span class="page-link">{{ num }}</span>
+                            </li>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+    {% else %}
+        <div class="alert alert-info">
+            <h4 class="alert-heading">No Current Vacancies</h4>
+            <p>We currently don't have any open positions. Please check back later for new opportunities!</p>
+        </div>
+    {% endif %}
+
+    <div class="card mt-5">
+        <div class="card-body">
+            <h2 class="card-title h4">Why Work With Us?</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-check text-success"></i> Competitive salary and benefits</li>
+                        <li><i class="fas fa-check text-success"></i> Professional development opportunities</li>
+                        <li><i class="fas fa-check text-success"></i> Friendly work environment</li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-check text-success"></i> Health insurance</li>
+                        <li><i class="fas fa-check text-success"></i> Paid vacation and holidays</li>
+                        <li><i class="fas fa-check text-success"></i> Career growth opportunities</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

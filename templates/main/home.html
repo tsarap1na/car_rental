@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Car Rental{% endblock %}
+
+{% block content %}
+<div class="jumbotron bg-light p-5 rounded">
+    <h1 class="display-4">Welcome to Car Rental</h1>
+    <p class="lead">Find the perfect car for your needs from our wide selection of vehicles.</p>
+    <hr class="my-4">
+    <p>We offer competitive rates and excellent service.</p>
+    <a class="btn btn-primary btn-lg" href="{% url 'main:car_list' %}" role="button">Browse Cars</a>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="alert alert-info">
+            <h5 class="alert-heading">🐱 Cat Fact of the Day</h5>
+            <p class="mb-0">{{ cat_fact }}</p>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="alert alert-info">
+            <h5 class="alert-heading">
+                <i class="fas fa-code me-2"></i>Programming Joke of the Hour
+            </h5>
+            {% if joke_data %}
+                <div class="mt-3">
+                    <p class="mb-3"><strong>Q:</strong> {{ joke_data.setup }}</p>
+                    <p class="mb-2"><strong>A:</strong> {{ joke_data.punchline }}</p>
+                </div>
+            {% else %}
+                <div class="text-center py-3">
+                    <div class="spinner-border spinner-border-sm text-info me-2" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <span>Loading a funny programming joke...</span>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% if latest_article %}
+<div class="mt-5">
+    <h2>Latest News</h2>
+    <div class="card">
+        {% if latest_article.image %}
+            <img src="{{ latest_article.image.url }}" class="card-img-top" alt="{{ latest_article.title }}">
+        {% endif %}
+        <div class="card-body">
+            <h5 class="card-title">{{ latest_article.title }}</h5>
+            <p class="card-text">{{ latest_article.content|truncatewords:50 }}</p>
+            <a href="{% url 'main:article_detail' latest_article.pk %}" class="btn btn-primary">Read More</a>
+        </div>
+        <div class="card-footer text-muted">
+            Published on {{ latest_article.created_at|date:"d/m/Y" }}
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<div class="row mt-5">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Wide Selection</h5>
+                <p class="card-text">Choose from our diverse fleet of vehicles to find the perfect car for your needs.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Best Prices</h5>
+                <p class="card-text">We offer competitive rates and special discounts for long-term rentals.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">24/7 Support</h5>
+                <p class="card-text">Our customer support team is always ready to help you with any questions.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-5">
+    <h2>How It Works</h2>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="text-center">
+                <div class="h1 text-primary">1</div>
+                <h5>Choose a Car</h5>
+                <p>Browse our selection and find the perfect car for your needs.</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="text-center">
+                <div class="h1 text-primary">2</div>
+                <h5>Make a Reservation</h5>
+                <p>Select your dates and complete the booking process.</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="text-center">
+                <div class="h1 text-primary">3</div>
+                <h5>Pick Up</h5>
+                <p>Get your car from our convenient location.</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="text-center">
+                <div class="h1 text-primary">4</div>
+                <h5>Enjoy Your Ride</h5>
+                <p>Hit the road and enjoy your journey!</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

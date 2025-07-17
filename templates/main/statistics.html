@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% load main_extras %}
+
+{% block title %}Statistics - Car Rental{% endblock %}
+
+{% block content %}
+<h1>Statistics</h1>
+
+<div class="row">
+    <!-- Overview Cards -->
+    <div class="col-md-3 mb-4">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <h5 class="card-title">Total Rentals</h5>
+                <h2 class="card-text">{{ total_rentals }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-4">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <h5 class="card-title">Total Revenue</h5>
+                <h2 class="card-text">${{ total_revenue|floatformat:2 }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-4">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <h5 class="card-title">Total Cars</h5>
+                <h2 class="card-text">{{ total_cars }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-4">
+        <div class="card bg-warning text-white">
+            <div class="card-body">
+                <h5 class="card-title">Total Clients</h5>
+                <h2 class="card-text">{{ total_clients }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Car Type Popularity Chart -->
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Car Type Popularity</h5>
+                <canvas id="carTypeChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Car Availability Chart -->
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Car Availability</h5>
+                <canvas id="availabilityChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Average Statistics -->
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Average Statistics</h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Average Rental Duration
+                        <span class="badge bg-primary rounded-pill">{{ avg_rental_duration|floatformat:1 }} days</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Average Rentals per Client
+                        <span class="badge bg-primary rounded-pill">{{ avg_client_rentals|floatformat:1 }}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Most Popular Car Types -->
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Most Popular Car Types</h5>
+                <ul class="list-group list-group-flush">
+                    {% for car_type in popular_car_types %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ car_type.name }}
+                            <span class="badge bg-primary rounded-pill">{{ car_type.rental_count }} rentals</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Car Type Popularity Chart
+    const carTypeCtx = document.getElementById('carTypeChart').getContext('2d');
+    new Chart(carTypeCtx, {
+        type: 'bar',
+        data: {
+            labels: [{% for car_type in popular_car_types %}'{{ car_type.name }}',{% endfor %}],
+            datasets: [{
+                label: 'Number of Rentals',
+                data: [{% for car_type in popular_car_types %}{{ car_type.rental_count }},{% endfor %}],
+                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // Car Availability Chart
+    const availabilityCtx = document.getElementById('availabilityChart').getContext('2d');
+    new Chart(availabilityCtx, {
+        type: 'pie',
+        data: {
+            labels: ['Available', 'Rented'],
+            datasets: [{
+                data: [{{ available_cars }}, {{ total_cars|sub:available_cars }}],
+                backgroundColor: [
+                    'rgba(75, 192, 192, 0.5)',
+                    'rgba(255, 99, 132, 0.5)'
+                ],
+                borderColor: [
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(255, 99, 132, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true
+        }
+    });
+</script>
+{% endblock %} 

@@ -1,0 +1,156 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Client Details - {{ client.user.get_full_name }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row">
+        <!-- Client Information -->
+        <div class="col-lg-4">
+            <div class="card shadow mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Client Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <i class="fas fa-user-circle fa-5x text-primary mb-3"></i>
+                        <h4>{{ client.user.get_full_name }}</h4>
+                        <p class="text-muted">Client since {{ client.user.date_joined|date:"M d, Y" }}</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-muted">Email</label>
+                        <p class="mb-0">{{ client.user.email }}</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-muted">Phone</label>
+                        <p class="mb-0">{{ client.phone }}</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-muted">Birth Date</label>
+                        <p class="mb-0">{{ client.birth_date|date:"M d, Y" }}</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-muted">Address</label>
+                        <p class="mb-0">{{ client.address }}</p>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'main:employee_rental_create' %}?client={{ client.id }}" class="btn btn-primary">
+                            <i class="fas fa-plus-circle"></i> Create New Rental
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Client Statistics -->
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Statistics</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6 mb-3">
+                            <div class="border rounded p-3 text-center">
+                                <h6 class="text-muted mb-1">Total Rentals</h6>
+                                <h4 class="mb-0">{{ rentals.count }}</h4>
+                            </div>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <div class="border rounded p-3 text-center">
+                                <h6 class="text-muted mb-1">Active Rentals</h6>
+                                <h4 class="mb-0">{{ rentals|dictsortreversed:"start_date"|first }}</h4>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="border rounded p-3 text-center">
+                                <h6 class="text-muted mb-1">Total Spent</h6>
+                                <h4 class="mb-0">${{ rentals|dictsortreversed:"final_amount"|first|default:"0.00" }}</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rental History -->
+        <div class="col-lg-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Rental History</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Car</th>
+                                    <th>Start Date</th>
+                                    <th>Expected Return</th>
+                                    <th>Actual Return</th>
+                                    <th>Status</th>
+                                    <th>Amount</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for rental in rentals %}
+                                <tr>
+                                    <td>#{{ rental.id }}</td>
+                                    <td>{{ rental.car }}</td>
+                                    <td>{{ rental.start_date|date:"M d, Y" }}</td>
+                                    <td>{{ rental.expected_return_date|date:"M d, Y" }}</td>
+                                    <td>
+                                        {% if rental.actual_return_date %}
+                                            {{ rental.actual_return_date|date:"M d, Y" }}
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <span class="badge {% if rental.status == 'active' %}bg-success{% elif rental.status == 'completed' %}bg-primary{% else %}bg-danger{% endif %}">
+                                            {{ rental.status|title }}
+                                        </span>
+                                    </td>
+                                    <td>${{ rental.final_amount|floatformat:2 }}</td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <a href="{% url 'main:employee_rental_update' rental.id %}" class="btn btn-sm btn-primary">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            {% if rental.status == 'active' %}
+                                            <form method="post" action="{% url 'main:complete_rental' rental.id %}" class="d-inline">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-sm btn-success" onclick="return confirm('Are you sure you want to complete this rental?')">
+                                                    <i class="fas fa-check"></i>
+                                                </button>
+                                            </form>
+                                            <form method="post" action="{% url 'main:cancel_rental' rental.id %}" class="d-inline">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to cancel this rental?')">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </form>
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="8" class="text-center">No rental history</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

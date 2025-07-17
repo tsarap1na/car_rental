@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ article.title }} - Car Rental{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'main:home' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'main:news' %}">News</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ article.title }}</li>
+        </ol>
+    </nav>
+
+    <article class="blog-post">
+        <h1 class="display-4 mb-4">{{ article.title }}</h1>
+        
+        <div class="mb-3 text-muted">
+            <small>
+                Published on {{ article.created_at|date:"F d, Y" }}
+                {% if article.updated_at != article.created_at %}
+                    <span class="mx-2">•</span>
+                    Last updated: {{ article.updated_at|date:"F d, Y" }}
+                {% endif %}
+            </small>
+        </div>
+
+        {% if article.image %}
+            <div class="mb-4">
+                <img src="{{ article.image.url }}" class="img-fluid rounded" alt="{{ article.title }}">
+            </div>
+        {% endif %}
+
+        <div class="blog-post-content">
+            {{ article.content|linebreaks }}
+        </div>
+    </article>
+
+    <div class="mt-5">
+        <a href="{% url 'main:news' %}" class="btn btn-outline-primary">
+            <i class="fas fa-arrow-left"></i> Back to News
+        </a>
+        
+        {% if user.is_staff %}
+            <div class="float-end">
+                <a href="{% url 'admin:main_article_change' article.pk %}" class="btn btn-warning">
+                    <i class="fas fa-edit"></i> Edit Article
+                </a>
+            </div>
+        {% endif %}
+    </div>
+
+    {% if user.is_staff %}
+        <div class="card mt-4">
+            <div class="card-body">
+                <h5 class="card-title">Article Statistics</h5>
+                <p class="card-text">
+                    <strong>Created:</strong> {{ article.created_at|date:"F d, Y H:i" }}<br>
+                    <strong>Last Modified:</strong> {{ article.updated_at|date:"F d, Y H:i" }}
+                </p>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %} 

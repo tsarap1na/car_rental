@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Детали аренды - Car Rental{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title mb-4">Детали аренды</h2>
+                    
+                    <!-- Информация об автомобиле -->
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h3 class="h5 mb-3">Информация об автомобиле</h3>
+                            <div class="d-flex align-items-center mb-3">
+                                {% if rental.car.image %}
+                                <img src="{{ rental.car.image.url }}" alt="{{ rental.car.model.name }}" class="me-3" style="width: 100px; height: 100px; object-fit: cover;">
+                                {% endif %}
+                                <div>
+                                    <h4 class="h5 mb-2">{{ rental.car.model.name }}</h4>
+                                    <p class="mb-1"><strong>Номер:</strong> {{ rental.car.license_plate }}</p>
+                                    <p class="mb-1"><strong>Год:</strong> {{ rental.car.year }}</p>
+                                    <p class="mb-1"><strong>Тип:</strong> {{ rental.car.model.car_type.name }}</p>
+                                    <p class="mb-0"><strong>Стоимость в день:</strong> ${{ rental.car.daily_rate }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Детали аренды -->
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="h5 mb-3">Информация об аренде</h3>
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <th style="width: 200px;">Статус:</th>
+                                        <td>
+                                            {% if rental.status == 'active' %}
+                                            <span class="badge bg-success">Активна</span>
+                                            {% elif rental.status == 'completed' %}
+                                            <span class="badge bg-secondary">Завершена</span>
+                                            {% elif rental.status == 'cancelled' %}
+                                            <span class="badge bg-danger">Отменена</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Дата начала:</th>
+                                        <td>{{ rental.start_date|date:"d.m.Y" }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Ожидаемая дата возврата:</th>
+                                        <td>{{ rental.expected_return_date|date:"d.m.Y" }}</td>
+                                    </tr>
+                                    {% if rental.actual_return_date %}
+                                    <tr>
+                                        <th>Фактическая дата возврата:</th>
+                                        <td>{{ rental.actual_return_date|date:"d.m.Y" }}</td>
+                                    </tr>
+                                    {% endif %}
+                                    <tr>
+                                        <th>Количество дней:</th>
+                                        <td>{{ rental.days }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Базовая стоимость:</th>
+                                        <td>${{ rental.base_amount }}</td>
+                                    </tr>
+                                    {% if rental.penalties.exists %}
+                                    <tr>
+                                        <th>Штрафы:</th>
+                                        <td>
+                                            <ul class="list-unstyled mb-0">
+                                                {% for penalty in rental.penalties.all %}
+                                                <li>{{ penalty.description }}: ${{ penalty.amount }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    {% endif %}
+                                    <tr>
+                                        <th>Итоговая стоимость:</th>
+                                        <td><strong>${{ rental.final_amount }}</strong></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Действия -->
+                    <div class="mt-4">
+                        {% if rental.status == 'active' %}
+                            <form method="post" action="{% url 'main:cancel_rental' rental.pk %}" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger" onclick="return confirm('Вы уверены, что хотите отменить аренду?')">
+                                    <i class="fas fa-times"></i> Отменить аренду
+                                </button>
+                            </form>
+                        {% endif %}
+                        <a href="{% url 'main:rental_list' %}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Назад к списку
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Сайдбар с дополнительной информацией -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="h5 mb-3">Клиент</h3>
+                    <p class="mb-1"><strong>Имя:</strong> {{ rental.client.user.get_full_name }}</p>
+                    <p class="mb-1"><strong>Email:</strong> {{ rental.client.user.email }}</p>
+                    <p class="mb-1"><strong>Телефон:</strong> {{ rental.client.phone }}</p>
+                    <p class="mb-0"><strong>Адрес:</strong> {{ rental.client.address }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

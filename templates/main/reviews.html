@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Reviews - Car Rental{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'main:home' %}">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Reviews</li>
+        </ol>
+    </nav>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="display-4">Customer Reviews</h1>
+        {% if user.is_authenticated and not user.is_staff %}
+            <a href="{% url 'main:add_review' %}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Write a Review
+            </a>
+        {% endif %}
+    </div>
+
+    {% if reviews %}
+        <div class="row">
+            <div class="col-md-8">
+                <div class="reviews-list">
+                    {% for review in reviews %}
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h5 class="card-title mb-0">{{ review.client.user.get_full_name }}</h5>
+                                    <div class="text-warning">
+                                        {% for i in "12345"|make_list %}
+                                            {% if forloop.counter <= review.rating %}
+                                                <i class="fas fa-star"></i>
+                                            {% else %}
+                                                <i class="far fa-star"></i>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <p class="card-text">{{ review.text|linebreaks }}</p>
+                                <p class="card-text">
+                                    <small class="text-muted">Posted on {{ review.created_at|date:"F d, Y" }}</small>
+                                </p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                {% if is_paginated %}
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-center">
+                            {% if page_obj.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=1">&laquo; First</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                                </li>
+                            {% endif %}
+
+                            {% for num in page_obj.paginator.page_range %}
+                                {% if page_obj.number == num %}
+                                    <li class="page-item active">
+                                        <span class="page-link">{{ num }}</span>
+                                    </li>
+                                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if page_obj.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                {% endif %}
+            </div>
+
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Review Summary</h5>
+                        <div class="text-center mb-3">
+                            <h2 class="display-4">
+                                {{ reviews|length|default:"0" }}
+                            </h2>
+                            <p class="text-muted">Total Reviews</p>
+                        </div>
+                        {% if not user.is_authenticated %}
+                            <div class="alert alert-info">
+                                <p class="mb-0">Please <a href="{% url 'main:login' %}">log in</a> to write a review.</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            <h4 class="alert-heading">No Reviews Yet</h4>
+            <p>Be the first to share your experience with our car rental service!</p>
+            {% if not user.is_authenticated %}
+                <p class="mb-0">Please <a href="{% url 'main:login' %}">log in</a> to write a review.</p>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %} 

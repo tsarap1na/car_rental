@@ -1,0 +1,33 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            <h2>Отладочная информация о пользователе</h2>
+        </div>
+        <div class="card-body">
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <strong>Имя пользователя:</strong> {{ username }}
+                </li>
+                <li class="list-group-item">
+                    <strong>Авторизован:</strong> {{ is_authenticated }}
+                </li>
+                <li class="list-group-item">
+                    <strong>Администратор (is_staff):</strong> {{ is_staff }}
+                </li>
+                <li class="list-group-item">
+                    <strong>Суперпользователь:</strong> {{ is_superuser }}
+                </li>
+                <li class="list-group-item">
+                    <strong>Является сотрудником:</strong> {{ has_employee }}
+                </li>
+                <li class="list-group-item">
+                    <strong>Группы:</strong> {{ groups|join:", " }}
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block title %}Privacy Policy - Car Rental{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h1 class="mb-4">Privacy Policy</h1>
+    
+    <div class="card mb-4">
+        <div class="card-body">
+            <h2 class="h5 mb-3">Information We Collect</h2>
+            <p>When you use our car rental service, we collect the following types of information:</p>
+            <ul>
+                <li>Personal identification information (Name, email address, phone number, etc.)</li>
+                <li>Driver's license information</li>
+                <li>Payment information</li>
+                <li>Rental history and preferences</li>
+                <li>Location data when using our vehicles</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h2 class="h5 mb-3">How We Use Your Information</h2>
+            <p>We use the collected information for:</p>
+            <ul>
+                <li>Processing your rental reservations</li>
+                <li>Communicating with you about your rentals</li>
+                <li>Improving our services</li>
+                <li>Sending promotional offers (with your consent)</li>
+                <li>Ensuring compliance with our terms of service</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h2 class="h5 mb-3">Data Security</h2>
+            <p>We implement appropriate security measures to protect your personal information:</p>
+            <ul>
+                <li>Encryption of sensitive data</li>
+                <li>Regular security assessments</li>
+                <li>Limited access to personal information</li>
+                <li>Secure data storage systems</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h2 class="h5 mb-3">Your Rights</h2>
+            <p>You have the right to:</p>
+            <ul>
+                <li>Access your personal data</li>
+                <li>Correct inaccurate data</li>
+                <li>Request deletion of your data</li>
+                <li>Withdraw consent for marketing communications</li>
+                <li>Request a copy of your data</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h2 class="h5 mb-3">Cookies</h2>
+            <p>We use cookies to improve your browsing experience and analyze site traffic. You can control cookie settings through your browser preferences.</p>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h2 class="h5 mb-3">Contact Us</h2>
+            <p>If you have any questions about our privacy policy, please contact us:</p>
+            <ul>
+                <li>Email: privacy@carrental.com</li>
+                <li>Phone: +375 (29) 123-45-67</li>
+                <li>Address: 123 Main St, Minsk, Belarus</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="text-muted">
+        <p>Last updated: {% now "F j, Y" %}</p>
+    </div>
+</div>
+{% endblock %} 

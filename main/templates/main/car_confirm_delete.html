@@ -1,0 +1,46 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header bg-danger text-white">
+                    <h2><i class="fas fa-exclamation-triangle"></i> Подтверждение удаления</h2>
+                </div>
+                <div class="card-body">
+                    <h4 class="mb-4">Вы действительно хотите удалить автомобиль?</h4>
+                    
+                    <div class="alert alert-warning">
+                        <h5>Информация об автомобиле:</h5>
+                        <ul class="list-unstyled">
+                            <li><strong>Модель:</strong> {{ object.model.name }}</li>
+                            <li><strong>Номер:</strong> {{ object.license_plate }}</li>
+                            <li><strong>Год:</strong> {{ object.year }}</li>
+                            <li><strong>Тип:</strong> {{ object.model.car_type.name }}</li>
+                        </ul>
+                    </div>
+
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-circle"></i>
+                        Это действие нельзя будет отменить. Все данные об автомобиле будут удалены.
+                    </div>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash"></i> Подтвердить удаление
+                            </button>
+                            <a href="{% url 'main:car_list' %}" class="btn btn-secondary">
+                                <i class="fas fa-times"></i> Отмена
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% block title %}Contacts - Car Rental{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h1 class="mb-4">Contact Us</h1>
+
+    <!-- Main Office -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h2 class="h4 mb-3">Main Office</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <h3 class="h5 mb-3">Address</h3>
+                    <p>
+                        <i class="fas fa-map-marker-alt me-2"></i>
+                        123 Main St, Minsk, Belarus
+                    </p>
+                    <p>
+                        <i class="fas fa-phone me-2"></i>
+                        +375 (29) 123-45-67
+                    </p>
+                    <p>
+                        <i class="fas fa-envelope me-2"></i>
+                        info@carrental.com
+                    </p>
+                    <p>
+                        <i class="fas fa-clock me-2"></i>
+                        Monday - Friday: 9:00 - 18:00<br>
+                        Saturday: 10:00 - 16:00<br>
+                        Sunday: Closed
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <div class="ratio ratio-16x9">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d150505.0461841432!2d27.454980950000003!3d53.8847608!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46dbcfd35b1e6ad3%3A0xb61b853ddb570d9!2sMinsk%2C+Belarus!5e0!3m2!1sen!2sus!4v1395469687986" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Our Team -->
+    <h2 class="h4 mb-4">Our Team</h2>
+    <div class="row row-cols-1 row-cols-md-3 g-4 mb-4">
+        {% for employee in employees %}
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        {% if employee.photo %}
+                            <img src="{{ employee.photo.url }}" alt="{{ employee.user.get_full_name }}" class="rounded-circle" style="width: 100px; height: 100px; object-fit: cover;">
+                        {% else %}
+                            <i class="fas fa-user fa-3x text-primary"></i>
+                        {% endif %}
+                    </div>
+                    <h3 class="h5">{{ employee.user.get_full_name }}</h3>
+                    <p class="text-muted">{{ employee.position }}</p>
+                    <p>
+                        <a href="mailto:{{ employee.email }}" class="text-decoration-none">
+                            <i class="fas fa-envelope me-2"></i>{{ employee.email }}
+                        </a>
+                    </p>
+                    <p>
+                        <i class="fas fa-phone me-2"></i>{{ employee.phone }}
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info">
+                No team members available at the moment.
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Contact Form -->
+    <div class="card">
+        <div class="card-body">
+            <h2 class="h4 mb-4">Send us a Message</h2>
+            <form>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Your Name</label>
+                            <input type="text" class="form-control" id="name" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="email" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="subject" class="form-label">Subject</label>
+                    <input type="text" class="form-control" id="subject" required>
+                </div>
+                <div class="mb-3">
+                    <label for="message" class="form-label">Message</label>
+                    <textarea class="form-control" id="message" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Send Message</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %} 

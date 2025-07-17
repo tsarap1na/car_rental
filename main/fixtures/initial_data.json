@@ -1,0 +1,176 @@
+[
+    {
+        "model": "main.cartype",
+        "pk": 1,
+        "fields": {
+            "name": "Седан",
+            "description": "Классический тип кузова с отдельным багажником"
+        }
+    },
+    {
+        "model": "main.cartype",
+        "pk": 2,
+        "fields": {
+            "name": "Кроссовер",
+            "description": "Универсальный автомобиль повышенной проходимости"
+        }
+    },
+    {
+        "model": "main.cartype",
+        "pk": 3,
+        "fields": {
+            "name": "Хэтчбек",
+            "description": "Компактный городской автомобиль с практичным багажником"
+        }
+    },
+    {
+        "model": "main.carmodel",
+        "pk": 1,
+        "fields": {
+            "name": "BMW 5 Series",
+            "car_type": 1,
+            "brand": "BMW",
+            "year": 2023,
+            "engine_type": "Бензин",
+            "transmission": "Автомат",
+            "seats": 5,
+            "fuel_consumption": 7.5,
+            "features": ["Кожаный салон", "Панорамная крыша", "Подогрев сидений", "Климат-контроль", "Парктроник"]
+        }
+    },
+    {
+        "model": "main.carmodel",
+        "pk": 2,
+        "fields": {
+            "name": "Toyota RAV4",
+            "car_type": 2,
+            "brand": "Toyota",
+            "year": 2023,
+            "engine_type": "Гибрид",
+            "transmission": "Вариатор",
+            "seats": 5,
+            "fuel_consumption": 5.8,
+            "features": ["Система полного привода", "Apple CarPlay", "Android Auto", "Камера 360°", "Адаптивный круиз-контроль"]
+        }
+    },
+    {
+        "model": "main.carmodel",
+        "pk": 3,
+        "fields": {
+            "name": "Volkswagen Golf",
+            "car_type": 3,
+            "brand": "Volkswagen",
+            "year": 2023,
+            "engine_type": "Бензин",
+            "transmission": "Робот DSG",
+            "seats": 5,
+            "fuel_consumption": 6.2,
+            "features": ["Цифровая приборная панель", "Светодиодные фары", "Система удержания полосы", "Беспроводная зарядка"]
+        }
+    },
+    {
+        "model": "main.carmodel",
+        "pk": 4,
+        "fields": {
+            "name": "Mercedes-Benz GLE",
+            "car_type": 2,
+            "brand": "Mercedes-Benz",
+            "year": 2023,
+            "engine_type": "Дизель",
+            "transmission": "Автомат",
+            "seats": 7,
+            "fuel_consumption": 8.1,
+            "features": ["MBUX", "Пневмоподвеска", "Массаж сидений", "Система ночного видения", "Премиум аудио Burmester"]
+        }
+    },
+    {
+        "model": "main.carmodel",
+        "pk": 5,
+        "fields": {
+            "name": "Audi A3",
+            "car_type": 3,
+            "brand": "Audi",
+            "year": 2023,
+            "engine_type": "Бензин",
+            "transmission": "Автомат",
+            "seats": 5,
+            "fuel_consumption": 6.5,
+            "features": ["Virtual Cockpit", "Matrix LED", "Bang & Olufsen аудио", "Спортивная подвеска"]
+        }
+    },
+    {
+        "model": "main.car",
+        "pk": 1,
+        "fields": {
+            "model": 1,
+            "color": "Черный металлик",
+            "number_plate": "1234 AB-7",
+            "vin": "WBAJD51070G123456",
+            "daily_rate": 150.00,
+            "mileage": 15000,
+            "is_available": true,
+            "image": "cars/bmw-5.jpg",
+            "description": "Роскошный бизнес-седан BMW 5 Series с максимальной комплектацией. Идеально подходит для деловых поездок и путешествий. Комфортный салон с кожаной отделкой, современные системы помощи водителю и мощный двигатель обеспечат приятное вождение."
+        }
+    },
+    {
+        "model": "main.car",
+        "pk": 2,
+        "fields": {
+            "model": 2,
+            "color": "Белый перламутр",
+            "number_plate": "2345 BC-7",
+            "vin": "JTMDFREV20D123456",
+            "daily_rate": 120.00,
+            "mileage": 25000,
+            "is_available": true,
+            "image": "cars/rav4.jpg",
+            "description": "Популярный гибридный кроссовер Toyota RAV4 с экономичным расходом топлива. Просторный салон, высокий клиренс и полный привод делают его идеальным выбором для семейных поездок и путешествий за город. Современные системы безопасности обеспечат спокойствие в пути."
+        }
+    },
+    {
+        "model": "main.car",
+        "pk": 3,
+        "fields": {
+            "model": 3,
+            "color": "Серый металлик",
+            "number_plate": "3456 CD-7",
+            "vin": "WVWZZZCDZE123456",
+            "daily_rate": 90.00,
+            "mileage": 18000,
+            "is_available": true,
+            "image": "cars/golf.jpg",
+            "description": "Volkswagen Golf - эталон компактного городского автомобиля. Отличная управляемость, экономичный расход топлива и современные технологии делают его идеальным выбором для городских поездок. Вместительный багажник и складывающиеся сиденья обеспечивают практичность в повседневном использовании."
+        }
+    },
+    {
+        "model": "main.car",
+        "pk": 4,
+        "fields": {
+            "model": 4,
+            "color": "Синий металлик",
+            "number_plate": "4567 DE-7",
+            "vin": "WDC1671131A123456",
+            "daily_rate": 200.00,
+            "mileage": 12000,
+            "is_available": true,
+            "image": "cars/gle.jpg",
+            "description": "Премиальный внедорожник Mercedes-Benz GLE с семиместным салоном. Пневматическая подвеска обеспечивает максимальный комфорт, а мощный дизельный двигатель - уверенную динамику. Идеальный выбор для больших семей и длительных путешествий. Роскошный интерьер с отделкой премиум-класса."
+        }
+    },
+    {
+        "model": "main.car",
+        "pk": 5,
+        "fields": {
+            "model": 5,
+            "color": "Красный металлик",
+            "number_plate": "5678 EF-7",
+            "vin": "WAUZZZGY5PA123456",
+            "daily_rate": 110.00,
+            "mileage": 20000,
+            "is_available": true,
+            "image": "cars/a3.jpg",
+            "description": "Спортивный и элегантный Audi A3 с передовыми технологиями. Отличное сочетание комфорта и динамики. Современный интерьер с виртуальной приборной панелью и премиальной аудиосистемой создает атмосферу высокого класса. Идеален для активных городских жителей."
+        }
+    }
+] 

@@ -1,0 +1,175 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Автомобили - Car Rental{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Панель управления -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <h3 class="card-title mb-3">Управление автопарком</h3>
+                    <div class="d-flex gap-2 flex-wrap">
+                        <a href="{% url 'main:car_create' %}" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Добавить автомобиль
+                        </a>
+                        <a href="{% url 'main:car_model_create' %}" class="btn btn-success">
+                            <i class="fas fa-car"></i> Добавить модель
+                        </a>
+                        <a href="{% url 'main:car_type_create' %}" class="btn btn-info text-white">
+                            <i class="fas fa-tags"></i> Добавить тип
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Фильтры и сортировка -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Фильтр по типу</h5>
+                    <form method="get" class="form-inline">
+                        <select name="type" class="form-select" onchange="this.form.submit()">
+                            <option value="">Все типы автомобилей</option>
+                            {% for type in car_types %}
+                            <option value="{{ type.id }}" {% if request.GET.type == type.id|stringformat:"i" %}selected{% endif %}>
+                                {{ type.name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Сортировка</h5>
+                    <form method="get" class="form-inline">
+                        <select name="sort" class="form-select" onchange="this.form.submit()">
+                            <option value="">По умолчанию</option>
+                            <option value="daily_rate" {% if request.GET.sort == 'daily_rate' %}selected{% endif %}>Цена (по возрастанию)</option>
+                            <option value="-daily_rate" {% if request.GET.sort == '-daily_rate' %}selected{% endif %}>Цена (по убыванию)</option>
+                            <option value="-year" {% if request.GET.sort == '-year' %}selected{% endif %}>Сначала новые</option>
+                            <option value="year" {% if request.GET.sort == 'year' %}selected{% endif %}>Сначала старые</option>
+                        </select>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Список автомобилей -->
+    <div class="row">
+        {% for car in cars %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
+                {% if car.image %}
+                <img src="{{ car.image.url }}" class="card-img-top" alt="{{ car.model.name }}" style="height: 200px; object-fit: cover;">
+                {% else %}
+                <img src="{% static 'main/images/default_car.jpg' %}" class="card-img-top" alt="Default car image" style="height: 200px; object-fit: cover;">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ car.model.name }}</h5>
+                    <div class="card-text">
+                        <div class="mb-2">
+                            <strong>Номер:</strong> {{ car.license_plate }}<br>
+                            <strong>Год:</strong> {{ car.year }}<br>
+                            <strong>Тип:</strong> {{ car.model.car_type.name }}<br>
+                            <strong>Цена в день:</strong> ${{ car.daily_rate }}<br>
+                            <strong>Статус:</strong> 
+                            {% if car.is_available %}
+                            <span class="badge bg-success">Доступен</span>
+                            {% else %}
+                            <span class="badge bg-danger">Занят</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <div class="d-grid gap-2">
+                        {% if car.is_available %}
+                        <a href="{% url 'main:rental_create' %}?car={{ car.pk }}" class="btn btn-primary">
+                            <i class="fas fa-key"></i> Арендовать
+                        </a>
+                        {% endif %}
+                        <div class="btn-group">
+                            <a href="{% url 'main:car_update' car.pk %}" class="btn btn-warning flex-grow-1">
+                                <i class="fas fa-edit"></i> Изменить
+                            </a>
+                            <a href="{% url 'main:car_delete' car.pk %}" class="btn btn-danger flex-grow-1">
+                                <i class="fas fa-trash"></i> Удалить
+                            </a>
+                        </div>
+                        {% if car.model %}
+                        <a href="{% url 'main:car_model_update' car.model.pk %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-cog"></i> Редактировать модель
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i> Нет доступных автомобилей по заданным критериям.
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Пагинация -->
+    {% if is_paginated %}
+    <nav aria-label="Page navigation" class="mt-4">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.type %}&type={{ request.GET.type }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}">
+                    <i class="fas fa-chevron-left"></i> Назад
+                </a>
+            </li>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+            <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                <a class="page-link" href="?page={{ num }}{% if request.GET.type %}&type={{ request.GET.type }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}">
+                    {{ num }}
+                </a>
+            </li>
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.type %}&type={{ request.GET.type }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}">
+                    Вперед <i class="fas fa-chevron-right"></i>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+
+<!-- Скрипты для улучшения UX -->
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Добавляем подтверждение удаления
+    const deleteButtons = document.querySelectorAll('a[href*="delete"]');
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            if (!confirm('Вы уверены, что хотите удалить этот автомобиль?')) {
+                e.preventDefault();
+            }
+        });
+    });
+});
+</script>
+{% endblock %}
+{% endblock %} 

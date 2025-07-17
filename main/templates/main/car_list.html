@@ -1,0 +1,223 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Автомобили - Car Rental{% endblock %}
+
+{% block content %}
+<!-- Debug info -->
+<div style="background-color: #ff0; padding: 10px; margin-bottom: 20px; border: 2px solid #f00;">
+    <h4 style="color: #f00; margin: 0;">Debug Information:</h4>
+    <ul style="margin: 10px 0 0 0; padding-left: 20px; color: #f00;">
+        <li>Is Authenticated: {{ debug.is_authenticated }}</li>
+        <li>Is Staff: {{ debug.is_staff }}</li>
+        <li>Is Employee: {{ debug.is_employee }}</li>
+        <li>Show Management: {{ debug.show_management }}</li>
+    </ul>
+</div>
+
+<div class="container-fluid mt-4">
+    <div class="row">
+        <!-- Фильтры и сортировка -->
+        <div class="col-md-3">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Фильтры</h5>
+                    <form method="get" id="filterForm">
+                        <!-- Фильтр по типу -->
+                        <div class="mb-3">
+                            <label class="form-label">Категория</label>
+                            <select name="type" class="form-select" onchange="this.form.submit()">
+                                <option value="">Все категории</option>
+                                {% for type in car_types %}
+                                <option value="{{ type.id }}" {% if request.GET.type|add:"0" == type.id %}selected{% endif %}>
+                                    {{ type.name }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Фильтр по производителю -->
+                        <div class="mb-3">
+                            <label class="form-label">Производитель</label>
+                            <select name="manufacturer" class="form-select" onchange="this.form.submit()">
+                                <option value="">Все производители</option>
+                                {% for manufacturer in manufacturers %}
+                                <option value="{{ manufacturer }}" {% if request.GET.manufacturer == manufacturer %}selected{% endif %}>
+                                    {{ manufacturer }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Фильтр по цене -->
+                        <div class="mb-3">
+                            <label class="form-label">Цена за день</label>
+                            <div class="row g-2">
+                                <div class="col-6">
+                                    <input type="number" name="min_price" class="form-control" placeholder="От"
+                                        value="{{ request.GET.min_price }}" min="{{ min_price }}" max="{{ max_price }}">
+                                </div>
+                                <div class="col-6">
+                                    <input type="number" name="max_price" class="form-control" placeholder="До"
+                                        value="{{ request.GET.max_price }}" min="{{ min_price }}" max="{{ max_price }}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Сортировка -->
+                        <div class="mb-3">
+                            <label class="form-label">Сортировка</label>
+                            <select name="sort" class="form-select" onchange="this.form.submit()">
+                                <option value="">По умолчанию</option>
+                                <option value="price_asc" {% if request.GET.sort == 'price_asc' %}selected{% endif %}>
+                                    Цена (по возрастанию)
+                                </option>
+                                <option value="price_desc" {% if request.GET.sort == 'price_desc' %}selected{% endif %}>
+                                    Цена (по убыванию)
+                                </option>
+                                <option value="year_desc" {% if request.GET.sort == 'year_desc' %}selected{% endif %}>
+                                    Год (сначала новые)
+                                </option>
+                                <option value="year_asc" {% if request.GET.sort == 'year_asc' %}selected{% endif %}>
+                                    Год (сначала старые)
+                                </option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">Применить фильтры</button>
+                    </form>
+                </div>
+            </div>
+
+            {% if user.is_authenticated and active_promos %}
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Активные промокоды</h5>
+                    <div class="list-group list-group-flush">
+                        {% for promo in active_promos %}
+                        <div class="list-group-item">
+                            <h6 class="mb-1">{{ promo.name }}</h6>
+                            <p class="mb-1 small">{{ promo.description }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">-{{ promo.discount_percent }}%</small>
+                                <span class="badge bg-primary">{{ promo.code }}</span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Список автомобилей -->
+        <div class="col-md-9">
+            {% if user.is_staff %}
+            <div class="mb-4">
+                <div class="btn-group">
+                    <a href="{% url 'main:car_create' %}" class="btn btn-success">
+                        <i class="fas fa-plus"></i> Добавить автомобиль
+                    </a>
+                    <a href="{% url 'main:car_model_create' %}" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Добавить модель
+                    </a>
+                    <a href="{% url 'main:car_type_create' %}" class="btn btn-info">
+                        <i class="fas fa-plus"></i> Добавить тип
+                    </a>
+                    <a href="{% url 'main:car_management' %}" class="btn btn-secondary">
+                        <i class="fas fa-cogs"></i> Управление автопарком
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                {% for car in cars %}
+                <div class="col">
+                    <div class="card h-100">
+                        {% if car.image %}
+                        <img src="{{ car.image.url }}" class="card-img-top" alt="{{ car.model.name }}"
+                            style="height: 200px; object-fit: cover;">
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ car.model.name }}</h5>
+                            <p class="card-text">
+                                <small class="text-muted">{{ car.model.car_type.name }}</small>
+                            </p>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-calendar"></i> {{ car.year }} год</li>
+                                <li><i class="fas fa-dollar-sign"></i> ${{ car.daily_rate }}/день</li>
+                                <li>
+                                    <i class="fas fa-check-circle {% if car.is_available %}text-success{% else %}text-warning{% endif %}"></i>
+                                    {% if car.is_available %}
+                                    Доступен для аренды
+                                    {% else %}
+                                    Занят
+                                    {% endif %}
+                                </li>
+                            </ul>
+                            
+                            <div class="btn-group w-100">
+                                <a href="{% url 'main:car_detail' car.pk %}" class="btn btn-outline-primary">
+                                    Подробнее
+                                </a>
+                                {% if user.is_authenticated and car.is_available %}
+                                <a href="{% url 'main:rental_create' %}?car={{ car.id }}" class="btn btn-primary">
+                                    Арендовать
+                                </a>
+                                {% endif %}
+                            </div>
+
+                            {% if user.is_staff %}
+                            <div class="btn-group w-100 mt-2">
+                                <a href="{% url 'main:car_update' car.pk %}" class="btn btn-warning">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="{% url 'main:car_delete' car.pk %}" class="btn btn-danger">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12">
+                    <div class="alert alert-info">
+                        По вашему запросу автомобили не найдены. Попробуйте изменить параметры фильтрации.
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            {% if is_paginated %}
+            <nav class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.type %}&type={{ request.GET.type }}{% endif %}{% if request.GET.manufacturer %}&manufacturer={{ request.GET.manufacturer }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}">
+                            <i class="fas fa-chevron-left"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% for num in page_obj.paginator.page_range %}
+                    <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                        <a class="page-link" href="?page={{ num }}{% if request.GET.type %}&type={{ request.GET.type }}{% endif %}{% if request.GET.manufacturer %}&manufacturer={{ request.GET.manufacturer }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}">{{ num }}</a>
+                    </li>
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.type %}&type={{ request.GET.type }}{% endif %}{% if request.GET.manufacturer %}&manufacturer={{ request.GET.manufacturer }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}">
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %} 

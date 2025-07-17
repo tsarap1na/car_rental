@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Register - Car Rental{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="card-title h3 text-center mb-4">Create an Account</h1>
+
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{ form.username|as_crispy_field }}
+                                {{ form.email|as_crispy_field }}
+                                {{ form.password1|as_crispy_field }}
+                                {{ form.password2|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.first_name|as_crispy_field }}
+                                {{ form.last_name|as_crispy_field }}
+                                {{ form.birth_date|as_crispy_field }}
+                                {{ form.phone|as_crispy_field }}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            {{ form.address|as_crispy_field }}
+                        </div>
+
+                        <div class="alert alert-info">
+                            <h4 class="alert-heading h6">Password Requirements:</h4>
+                            <ul class="mb-0 small">
+                                <li>At least 8 characters long</li>
+                                <li>Must contain at least one uppercase letter</li>
+                                <li>Must contain at least one number</li>
+                                <li>Must contain at least one special character</li>
+                                <li>Cannot be similar to your personal information</li>
+                            </ul>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-user-plus"></i> Register
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="text-center mt-3">
+                        <p class="mb-0">Already have an account? <a href="{% url 'main:login' %}">Login here</a></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h2 class="card-title h5">Benefits of Registration</h2>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-check text-success"></i> Quick booking process</li>
+                                <li><i class="fas fa-check text-success"></i> Exclusive member discounts</li>
+                                <li><i class="fas fa-check text-success"></i> Save favorite cars</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-check text-success"></i> View rental history</li>
+                                <li><i class="fas fa-check text-success"></i> Special promotional offers</li>
+                                <li><i class="fas fa-check text-success"></i> Priority customer support</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

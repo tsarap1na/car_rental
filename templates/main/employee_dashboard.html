@@ -1,0 +1,180 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Employee Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="card shadow mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'main:employee_rental_create' %}" class="btn btn-outline-primary">
+                            <i class="fas fa-plus-circle"></i> New Rental
+                        </a>
+                        <a href="{% url 'main:employee_client_create' %}" class="btn btn-outline-primary">
+                            <i class="fas fa-user-plus"></i> New Client
+                        </a>
+                        <a href="{% url 'main:employee_rentals' %}" class="btn btn-outline-primary">
+                            <i class="fas fa-list"></i> All Rentals
+                        </a>
+                        <a href="{% url 'main:employee_clients' %}" class="btn btn-outline-primary">
+                            <i class="fas fa-users"></i> All Clients
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-9">
+            <div class="row">
+                <!-- Statistics Cards -->
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow border-left-primary h-100">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                        Total Rentals</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_rentals }}</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow border-left-success h-100">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                        Active Rentals</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ active_rentals_count }}</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-car fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow border-left-info h-100">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                        Total Revenue</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">${{ total_revenue|floatformat:2 }}</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active Rentals Table -->
+            <div class="card shadow mb-4">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Active Rentals</h5>
+                    <a href="{% url 'main:employee_rentals' %}?status=active" class="btn btn-light btn-sm">View All</a>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Client</th>
+                                    <th>Car</th>
+                                    <th>Start Date</th>
+                                    <th>Expected Return</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for rental in active_rentals %}
+                                <tr>
+                                    <td>#{{ rental.id }}</td>
+                                    <td>
+                                        <a href="{% url 'main:employee_client_detail' rental.client.id %}">
+                                            {{ rental.client }}
+                                        </a>
+                                    </td>
+                                    <td>{{ rental.car }}</td>
+                                    <td>{{ rental.start_date|date:"M d, Y" }}</td>
+                                    <td>{{ rental.expected_return_date|date:"M d, Y" }}</td>
+                                    <td>
+                                        <a href="{% url 'main:employee_rental_update' rental.id %}" class="btn btn-sm btn-primary">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6" class="text-center">No active rentals</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Clients -->
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Recent Clients</h5>
+                    <a href="{% url 'main:employee_clients' %}" class="btn btn-light btn-sm">View All</a>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Phone</th>
+                                    <th>Email</th>
+                                    <th>Joined</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for client in recent_clients %}
+                                <tr>
+                                    <td>{{ client.user.get_full_name }}</td>
+                                    <td>{{ client.phone }}</td>
+                                    <td>{{ client.user.email }}</td>
+                                    <td>{{ client.user.date_joined|date:"M d, Y" }}</td>
+                                    <td>
+                                        <a href="{% url 'main:employee_client_detail' client.id %}" class="btn btn-sm btn-primary">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="5" class="text-center">No clients yet</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

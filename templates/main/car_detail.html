@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ car.model }} - Car Rental{% endblock %}
+
+{% block content %}
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'main:home' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'main:car_list' %}">Cars</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ car.model }}</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-6">
+            {% if car.image %}
+                <img src="{{ car.image.url }}" class="img-fluid rounded" alt="{{ car.model }}">
+            {% else %}
+                <div class="bg-light p-5 rounded text-center">
+                    <h3>No image available</h3>
+                </div>
+            {% endif %}
+        </div>
+        <div class="col-md-6">
+            <h1>{{ car.model }}</h1>
+            <p class="lead">{{ car.model.description }}</p>
+            
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Car Details</h5>
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th>Manufacturer:</th>
+                                <td>{{ car.model.manufacturer }}</td>
+                            </tr>
+                            <tr>
+                                <th>Type:</th>
+                                <td>{{ car.model.car_type }}</td>
+                            </tr>
+                            <tr>
+                                <th>Year:</th>
+                                <td>{{ car.year }}</td>
+                            </tr>
+                            <tr>
+                                <th>License Plate:</th>
+                                <td>{{ car.license_plate }}</td>
+                            </tr>
+                            <tr>
+                                <th>Daily Rate:</th>
+                                <td>${{ car.daily_rate }}</td>
+                            </tr>
+                            <tr>
+                                <th>Status:</th>
+                                <td>
+                                    {% if car.is_available %}
+                                        <span class="badge bg-success">Available</span>
+                                    {% else %}
+                                        <span class="badge bg-danger">Not Available</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            {% if car.is_available %}
+                {% if user.is_authenticated %}
+                    <a href="{% url 'main:rental_create' %}?car={{ car.pk }}" class="btn btn-primary btn-lg">Rent Now</a>
+                {% else %}
+                    <a href="{% url 'main:login' %}?next={{ request.path }}" class="btn btn-primary btn-lg">Login to Rent</a>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-12">
+            <h2>Car Type Description</h2>
+            <p>{{ car.model.car_type.description }}</p>
+        </div>
+    </div>
+
+    {% if user.is_staff %}
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Admin Actions</h5>
+                        <a href="{% url 'admin:main_car_change' car.pk %}" class="btn btn-warning">Edit in Admin</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %} 
