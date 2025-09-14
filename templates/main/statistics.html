@@ -9,7 +9,7 @@
 <div class="row">
     <!-- Overview Cards -->
     <div class="col-md-3 mb-4">
-        <div class="card bg-primary text-white">
+        <div class="card bg-primary-card text-white">
             <div class="card-body">
                 <h5 class="card-title">Total Rentals</h5>
                 <h2 class="card-text">{{ total_rentals }}</h2>
@@ -17,7 +17,7 @@
         </div>
     </div>
     <div class="col-md-3 mb-4">
-        <div class="card bg-success text-white">
+        <div class="card bg-success-card text-white">
             <div class="card-body">
                 <h5 class="card-title">Total Revenue</h5>
                 <h2 class="card-text">${{ total_revenue|floatformat:2 }}</h2>
@@ -25,7 +25,7 @@
         </div>
     </div>
     <div class="col-md-3 mb-4">
-        <div class="card bg-info text-white">
+        <div class="card bg-info-card text-white">
             <div class="card-body">
                 <h5 class="card-title">Total Cars</h5>
                 <h2 class="card-text">{{ total_cars }}</h2>
@@ -33,7 +33,7 @@
         </div>
     </div>
     <div class="col-md-3 mb-4">
-        <div class="card bg-warning text-white">
+        <div class="card bg-warning-card text-white">
             <div class="card-body">
                 <h5 class="card-title">Total Clients</h5>
                 <h2 class="card-text">{{ total_clients }}</h2>
@@ -48,7 +48,15 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Car Type Popularity</h5>
-                <canvas id="carTypeChart"></canvas>
+                {% if car_type_chart %}
+                    <div class="chart-container">
+                        <img src="data:image/png;base64,{{ car_type_chart }}" alt="Car Type Popularity Chart" class="img-fluid">
+                    </div>
+                {% else %}
+                    <div class="no-data-message">
+                        <p class="text-muted">No data available for car type popularity</p>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -58,7 +66,15 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Car Availability</h5>
-                <canvas id="availabilityChart"></canvas>
+                {% if availability_chart %}
+                    <div class="chart-container">
+                        <img src="data:image/png;base64,{{ availability_chart }}" alt="Car Availability Chart" class="img-fluid">
+                    </div>
+                {% else %}
+                    <div class="no-data-message">
+                        <p class="text-muted">No data available for car availability</p>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -70,16 +86,24 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Average Statistics</h5>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        Average Rental Duration
-                        <span class="badge bg-primary rounded-pill">{{ avg_rental_duration|floatformat:1 }} days</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        Average Rentals per Client
-                        <span class="badge bg-primary rounded-pill">{{ avg_client_rentals|floatformat:1 }}</span>
-                    </li>
-                </ul>
+                <div class="stat-item mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="stat-label">Average Rental Duration</span>
+                        <span class="stat-value">{{ avg_rental_duration|floatformat:1 }} days</span>
+                    </div>
+                    <div class="stat-bar">
+                        <div class="stat-fill" style="width: {{ avg_duration_percent|floatformat:1 }}%"></div>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="stat-label">Average Rentals per Client</span>
+                        <span class="stat-value">{{ avg_client_rentals|floatformat:1 }}</span>
+                    </div>
+                    <div class="stat-bar">
+                        <div class="stat-fill" style="width: {{ avg_client_rentals_percent|floatformat:1 }}%"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -89,69 +113,184 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Most Popular Car Types</h5>
-                <ul class="list-group list-group-flush">
+                {% if popular_car_types %}
                     {% for car_type in popular_car_types %}
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            {{ car_type.name }}
-                            <span class="badge bg-primary rounded-pill">{{ car_type.rental_count }} rentals</span>
-                        </li>
+                        <div class="progress-item mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <span class="car-type-name">{{ car_type.name }}</span>
+                                <span class="rental-count">{{ car_type.rental_count }} rentals</span>
+                            </div>
+                            <div class="progress" style="height: 8px;">
+                                <div class="progress-bar-custom" role="progressbar" 
+                                     style="width: {{ car_type.percentage|floatformat:1 }}%"
+                                     aria-valuenow="{{ car_type.rental_count }}" 
+                                     aria-valuemin="0" 
+                                     aria-valuemax="{{ popular_car_types.0.rental_count }}">
+                                </div>
+                            </div>
+                        </div>
                     {% endfor %}
-                </ul>
+                {% else %}
+                    <div class="no-data-message">
+                        <p class="text-muted">No car type data available</p>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>
 </div>
 {% endblock %}
 
-{% block extra_js %}
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    // Car Type Popularity Chart
-    const carTypeCtx = document.getElementById('carTypeChart').getContext('2d');
-    new Chart(carTypeCtx, {
-        type: 'bar',
-        data: {
-            labels: [{% for car_type in popular_car_types %}'{{ car_type.name }}',{% endfor %}],
-            datasets: [{
-                label: 'Number of Rentals',
-                data: [{% for car_type in popular_car_types %}{{ car_type.rental_count }},{% endfor %}],
-                backgroundColor: 'rgba(54, 162, 235, 0.5)',
-                borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
-
-    // Car Availability Chart
-    const availabilityCtx = document.getElementById('availabilityChart').getContext('2d');
-    new Chart(availabilityCtx, {
-        type: 'pie',
-        data: {
-            labels: ['Available', 'Rented'],
-            datasets: [{
-                data: [{{ available_cars }}, {{ total_cars|sub:available_cars }}],
-                backgroundColor: [
-                    'rgba(75, 192, 192, 0.5)',
-                    'rgba(255, 99, 132, 0.5)'
-                ],
-                borderColor: [
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(255, 99, 132, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true
-        }
-    });
-</script>
-{% endblock %} 
+{% block extra_css %}
+<style>
+    .chart-container {
+        text-align: center;
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        margin: 10px 0;
+    }
+    
+    .chart-container img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 4px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .no-data-message {
+        text-align: center;
+        padding: 40px 20px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        border: 2px dashed #dee2e6;
+    }
+    
+    .no-data-message p {
+        margin: 0;
+        font-size: 16px;
+    }
+    
+    .card-title {
+        color: #2c3e50;
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
+    
+    .card {
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border: none;
+        transition: transform 0.2s ease-in-out;
+    }
+    
+    .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    .list-group-item {
+        border: none;
+        border-bottom: 1px solid #e9ecef;
+        padding: 15px 0;
+    }
+    
+    .list-group-item:last-child {
+        border-bottom: none;
+    }
+    
+    .badge {
+        font-size: 0.9em;
+        padding: 8px 12px;
+    }
+    
+    .bg-primary-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    .bg-success-card {
+        background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    }
+    
+    .bg-info-card {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    }
+    
+    .bg-warning-card {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    }
+    
+    .progress-item {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        border-left: 4px solid #3498db;
+    }
+    
+    .car-type-name {
+        font-weight: 600;
+        color: #2c3e50;
+        font-size: 14px;
+    }
+    
+    .rental-count {
+        font-weight: 600;
+        color: #3498db;
+        font-size: 14px;
+    }
+    
+    .progress {
+        background-color: #e9ecef;
+        border-radius: 4px;
+        overflow: hidden;
+        height: 8px;
+    }
+    
+    .progress-bar-custom {
+        background: linear-gradient(90deg, #3498db 0%, #2ecc71 100%);
+        border-radius: 4px;
+        transition: width 0.6s ease;
+        height: 100%;
+    }
+    
+    .progress-bar-custom:hover {
+        background: linear-gradient(90deg, #2980b9 0%, #27ae60 100%);
+    }
+    
+    .stat-item {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        border-left: 4px solid #e74c3c;
+    }
+    
+    .stat-label {
+        font-weight: 600;
+        color: #2c3e50;
+        font-size: 14px;
+    }
+    
+    .stat-value {
+        font-weight: 700;
+        color: #e74c3c;
+        font-size: 16px;
+    }
+    
+    .stat-bar {
+        background-color: #e9ecef;
+        height: 6px;
+        border-radius: 3px;
+        overflow: hidden;
+    }
+    
+    .stat-fill {
+        background: linear-gradient(90deg, #e74c3c 0%, #f39c12 100%);
+        height: 100%;
+        border-radius: 3px;
+        transition: width 0.8s ease;
+    }
+    
+    .stat-fill:hover {
+        background: linear-gradient(90deg, #c0392b 0%, #e67e22 100%);
+    }
+</style>
+{% endblock %}

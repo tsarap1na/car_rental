@@ -28,6 +28,12 @@ from django.core.cache import cache
 from datetime import datetime, timedelta
 import re
 import pytz
+import matplotlib
+matplotlib.use('Agg')  # Use non-interactive backend
+import matplotlib.pyplot as plt
+import matplotlib.patches as patches
+import io
+import base64
 from decimal import Decimal
 
 logger = logging.getLogger(__name__)
@@ -568,6 +574,72 @@ class StatisticsView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
     def test_func(self):
         return self.request.user.is_staff
 
+    def generate_car_type_chart(self, popular_car_types):
+        """Generate bar chart for car type popularity"""
+        if not popular_car_types:
+            return None
+            
+        plt.figure(figsize=(10, 6))
+        names = [car_type.name for car_type in popular_car_types]
+        counts = [car_type.rental_count for car_type in popular_car_types]
+        
+        bars = plt.bar(names, counts, color='#3498db', alpha=0.7, edgecolor='#2980b9', linewidth=1)
+        plt.title('Car Type Popularity', fontsize=16, fontweight='bold', pad=20)
+        plt.xlabel('Car Types', fontsize=12)
+        plt.ylabel('Number of Rentals', fontsize=12)
+        plt.xticks(rotation=45, ha='right')
+        plt.grid(axis='y', alpha=0.3)
+        
+        # Add value labels on bars
+        for bar, count in zip(bars, counts):
+            plt.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 0.1,
+                    str(count), ha='center', va='bottom', fontweight='bold')
+        
+        plt.tight_layout()
+        
+        # Convert to base64 string
+        buffer = io.BytesIO()
+        plt.savefig(buffer, format='png', dpi=100, bbox_inches='tight')
+        buffer.seek(0)
+        image_png = buffer.getvalue()
+        buffer.close()
+        plt.close()
+        
+        return base64.b64encode(image_png).decode()
+
+    def generate_availability_chart(self, available_cars, total_cars):
+        """Generate pie chart for car availability"""
+        if total_cars == 0:
+            return None
+            
+        rented_cars = total_cars - available_cars
+        labels = ['Available', 'Rented']
+        sizes = [available_cars, rented_cars]
+        colors = ['#2ecc71', '#e74c3c']
+        
+        plt.figure(figsize=(8, 8))
+        wedges, texts, autotexts = plt.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%',
+                                          startangle=90, textprops={'fontsize': 12})
+        
+        # Customize text
+        for autotext in autotexts:
+            autotext.set_color('white')
+            autotext.set_fontweight('bold')
+            autotext.set_fontsize(14)
+        
+        plt.title('Car Availability', fontsize=16, fontweight='bold', pad=20)
+        plt.axis('equal')
+        
+        # Convert to base64 string
+        buffer = io.BytesIO()
+        plt.savefig(buffer, format='png', dpi=100, bbox_inches='tight')
+        buffer.seek(0)
+        image_png = buffer.getvalue()
+        buffer.close()
+        plt.close()
+        
+        return base64.b64encode(image_png).decode()
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         
@@ -583,10 +655,11 @@ class StatisticsView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
         context['available_cars'] = cars.filter(is_available=True).count()
         
         # Most popular car types
-        context['popular_car_types'] = (
+        popular_car_types = (
             CarType.objects.annotate(rental_count=Count('carmodel__car__rental'))
             .order_by('-rental_count')
         )
+        context['popular_car_types'] = popular_car_types
         
         # Client statistics
         clients = Client.objects.all()
@@ -594,6 +667,24 @@ class StatisticsView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
         context['avg_client_rentals'] = (
             rentals.count() / clients.count() if clients.count() > 0 else 0
         )
+        
+        # Generate charts
+        context['car_type_chart'] = self.generate_car_type_chart(popular_car_types)
+        context['availability_chart'] = self.generate_availability_chart(
+            context['available_cars'], context['total_cars']
+        )
+        
+        # Calculate percentages for CSS bars
+        context['avg_duration_percent'] = min(100, max(0, (context['avg_rental_duration'] or 0) / 30 * 100))
+        context['avg_client_rentals_percent'] = min(100, max(0, (context['avg_client_rentals'] or 0) / 10 * 100))
+        
+        # Calculate percentages for car type popularity bars
+        if popular_car_types and popular_car_types[0].rental_count > 0:
+            for car_type in popular_car_types:
+                car_type.percentage = (car_type.rental_count / popular_car_types[0].rental_count) * 100
+        else:
+            for car_type in popular_car_types:
+                car_type.percentage = 0
         
         return context
 

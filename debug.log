@@ -8636,3 +8636,158 @@ INFO 2025-07-17 15:20:52,973 basehttp 49672 56132 "GET /media/employees/ava1.jpg
 INFO 2025-07-17 15:21:00,974 basehttp 49672 56132 "GET /reviews/ HTTP/1.1" 200 15197
 INFO 2025-07-17 15:21:07,464 basehttp 49672 56132 "GET /promos/ HTTP/1.1" 200 5190
 INFO 2025-07-17 15:21:09,158 basehttp 49672 56132 "GET /jobs/ HTTP/1.1" 200 19206
+INFO 2025-09-14 19:40:33,379 autoreload 52316 52088 Watching for file changes with StatReloader
+INFO 2025-09-14 19:40:42,831 basehttp 52316 52956 "GET / HTTP/1.1" 200 8443
+INFO 2025-09-14 19:40:46,378 basehttp 52316 52956 "GET /login/ HTTP/1.1" 200 6775
+INFO 2025-09-14 19:40:49,225 basehttp 52316 52956 "POST /login/ HTTP/1.1" 200 6960
+INFO 2025-09-14 19:41:14,526 autoreload 50348 31716 Watching for file changes with StatReloader
+INFO 2025-09-14 19:41:20,246 basehttp 50348 7336 "POST /login/ HTTP/1.1" 200 6960
+INFO 2025-09-14 19:41:25,386 basehttp 50348 7336 "POST /login/ HTTP/1.1" 200 6960
+INFO 2025-09-14 19:42:34,649 autoreload 50348 31716 D:\car_rental\car_rental\settings.py changed, reloading.
+INFO 2025-09-14 19:42:35,827 autoreload 37216 3840 Watching for file changes with StatReloader
+INFO 2025-09-14 19:42:55,648 autoreload 48212 53176 Watching for file changes with StatReloader
+INFO 2025-09-14 19:43:00,415 basehttp 48212 53604 "GET / HTTP/1.1" 200 8533
+INFO 2025-09-14 19:43:02,648 basehttp 48212 53604 "GET /login/ HTTP/1.1" 200 6775
+INFO 2025-09-14 19:43:04,839 basehttp 48212 53604 "POST /login/ HTTP/1.1" 200 6960
+INFO 2025-09-14 19:43:25,876 basehttp 48212 53604 "POST /login/ HTTP/1.1" 302 0
+INFO 2025-09-14 19:43:25,888 basehttp 48212 53604 "GET / HTTP/1.1" 200 9010
+INFO 2025-09-14 19:43:31,352 basehttp 48212 53604 "GET /profile/ HTTP/1.1" 200 63647
+INFO 2025-09-14 19:43:32,606 basehttp 48212 53604 "GET /rentals/ HTTP/1.1" 200 5234
+INFO 2025-09-14 19:43:34,611 basehttp 48212 53604 "POST /logout/ HTTP/1.1" 302 0
+INFO 2025-09-14 19:43:34,622 basehttp 48212 53604 "GET / HTTP/1.1" 200 8700
+INFO 2025-09-14 19:43:36,579 basehttp 48212 53604 "GET /login/ HTTP/1.1" 200 6775
+INFO 2025-09-14 19:43:40,659 basehttp 48212 53604 "POST /login/ HTTP/1.1" 200 6960
+INFO 2025-09-14 19:46:24,915 autoreload 3916 41372 Watching for file changes with StatReloader
+INFO 2025-09-14 19:46:33,572 basehttp 3916 38764 "GET / HTTP/1.1" 200 8345
+INFO 2025-09-14 19:46:36,292 basehttp 3916 38764 "GET /login/ HTTP/1.1" 200 6775
+INFO 2025-09-14 19:46:40,594 basehttp 3916 38764 "POST /login/ HTTP/1.1" 200 6960
+INFO 2025-09-14 19:50:29,707 autoreload 53312 52704 Watching for file changes with StatReloader
+INFO 2025-09-14 19:51:31,993 autoreload 48836 3256 Watching for file changes with StatReloader
+INFO 2025-09-14 19:52:19,105 autoreload 49080 53272 Watching for file changes with StatReloader
+INFO 2025-09-14 19:55:05,644 autoreload 26672 21632 Watching for file changes with StatReloader
+INFO 2025-09-14 19:55:10,905 basehttp 26672 53844 "GET / HTTP/1.1" 200 8437
+INFO 2025-09-14 19:55:14,120 basehttp 26672 53844 "GET /reviews/ HTTP/1.1" 200 15197
+INFO 2025-09-14 19:55:15,177 basehttp 26672 53844 "GET /promos/ HTTP/1.1" 200 5190
+INFO 2025-09-14 19:55:16,936 basehttp 26672 53844 "GET /login/ HTTP/1.1" 200 6775
+INFO 2025-09-14 19:55:22,070 basehttp 26672 53844 "POST /login/ HTTP/1.1" 200 6960
+INFO 2025-09-14 19:55:43,759 autoreload 53484 50648 Watching for file changes with StatReloader
+INFO 2025-09-14 19:55:52,352 basehttp 53484 47720 "GET / HTTP/1.1" 200 8458
+INFO 2025-09-14 19:55:54,562 basehttp 53484 47720 "GET /login/ HTTP/1.1" 200 6743
+INFO 2025-09-14 19:55:58,944 basehttp 53484 47720 "POST /login/ HTTP/1.1" 200 6928
+INFO 2025-09-14 19:56:22,638 autoreload 51472 5332 Watching for file changes with StatReloader
+INFO 2025-09-14 19:56:26,849 basehttp 51472 51884 "GET / HTTP/1.1" 200 8570
+INFO 2025-09-14 19:58:02,329 autoreload 51120 32580 Watching for file changes with StatReloader
+INFO 2025-09-14 19:58:06,061 basehttp 51120 53008 "GET / HTTP/1.1" 200 8471
+INFO 2025-09-14 19:58:07,862 basehttp 51120 53008 "GET /login/ HTTP/1.1" 200 6743
+INFO 2025-09-14 19:58:15,865 basehttp 51120 53008 "POST /login/ HTTP/1.1" 302 0
+INFO 2025-09-14 19:58:15,888 basehttp 51120 53008 "GET / HTTP/1.1" 200 9305
+INFO 2025-09-14 19:58:18,233 basehttp 51120 53008 "GET /statistics/ HTTP/1.1" 200 80320
+INFO 2025-09-14 20:00:52,647 autoreload 52368 23840 Watching for file changes with StatReloader
+INFO 2025-09-14 20:01:43,100 autoreload 49080 53272 D:\car_rental\main\views.py changed, reloading.
+INFO 2025-09-14 20:01:43,352 autoreload 52368 23840 D:\car_rental\main\views.py changed, reloading.
+INFO 2025-09-14 20:01:44,141 autoreload 49340 52332 Watching for file changes with StatReloader
+INFO 2025-09-14 20:01:44,655 autoreload 52992 51848 Watching for file changes with StatReloader
+INFO 2025-09-14 20:01:48,565 autoreload 49340 52332 D:\car_rental\main\views.py changed, reloading.
+INFO 2025-09-14 20:01:48,962 autoreload 52992 51848 D:\car_rental\main\views.py changed, reloading.
+INFO 2025-09-14 20:01:49,553 autoreload 16492 45820 Watching for file changes with StatReloader
+INFO 2025-09-14 20:01:50,016 autoreload 33508 31308 Watching for file changes with StatReloader
+INFO 2025-09-14 20:03:14,092 autoreload 53444 52728 Watching for file changes with StatReloader
+INFO 2025-09-14 20:03:33,100 autoreload 1352 53308 Watching for file changes with StatReloader
+INFO 2025-09-14 20:03:46,308 basehttp 16492 11312 "GET / HTTP/1.1" 200 9190
+INFO 2025-09-14 20:03:50,713 basehttp 16492 11312 "GET /profile/ HTTP/1.1" 200 63988
+INFO 2025-09-14 20:03:54,583 basehttp 16492 11312 "POST /logout/ HTTP/1.1" 302 0
+INFO 2025-09-14 20:03:54,594 basehttp 16492 11312 "GET / HTTP/1.1" 200 8523
+INFO 2025-09-14 20:03:55,796 basehttp 16492 11312 "GET /login/ HTTP/1.1" 200 6743
+INFO 2025-09-14 20:03:58,091 basehttp 16492 11312 "POST /login/ HTTP/1.1" 302 0
+INFO 2025-09-14 20:03:58,102 basehttp 16492 11312 "GET / HTTP/1.1" 200 9190
+INFO 2025-09-14 20:04:00,256 basehttp 16492 11312 "GET /statistics/ HTTP/1.1" 200 80355
+INFO 2025-09-14 20:04:21,161 basehttp 16492 11312 "GET /news/ HTTP/1.1" 200 17893
+INFO 2025-09-14 20:04:22,735 basehttp 16492 11312 "GET /news/10/ HTTP/1.1" 200 7285
+INFO 2025-09-14 20:11:54,730 autoreload 23640 42676 Watching for file changes with StatReloader
+INFO 2025-09-14 20:12:01,556 basehttp 16492 49796 "GET / HTTP/1.1" 200 9190
+INFO 2025-09-14 20:12:04,765 basehttp 16492 49796 "GET /statistics/ HTTP/1.1" 200 80355
+INFO 2025-09-14 20:12:06,589 basehttp 16492 49796 "GET /about/ HTTP/1.1" 200 8743
+INFO 2025-09-14 20:26:04,380 basehttp 16492 40184 "GET /jobs/ HTTP/1.1" 200 20276
+INFO 2025-09-14 20:26:11,760 basehttp 16492 40184 "GET /news/ HTTP/1.1" 200 17893
+INFO 2025-09-14 20:26:14,186 basehttp 16492 40184 "GET /jobs/ HTTP/1.1" 200 20276
+INFO 2025-09-14 20:27:14,853 basehttp 16492 40184 "GET /promos/ HTTP/1.1" 200 6220
+INFO 2025-09-14 20:27:32,771 basehttp 16492 40184 "GET /admin/main/promo/add/ HTTP/1.1" 200 15764
+INFO 2025-09-14 20:27:32,866 basehttp 16492 40184 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-09-14 20:27:38,255 basehttp 16492 40184 "GET /cars/ HTTP/1.1" 200 21950
+INFO 2025-09-14 20:27:51,018 basehttp 16492 40184 "GET /promos/ HTTP/1.1" 200 6220
+INFO 2025-09-14 20:27:52,347 basehttp 16492 40184 "GET /admin/main/promo/add/ HTTP/1.1" 200 15764
+INFO 2025-09-14 20:27:52,408 basehttp 16492 40184 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-09-14 20:28:24,530 basehttp 16492 40184 "GET /static/admin/img/calendar-icons.svg HTTP/1.1" 200 1094
+ERROR 2025-09-14 20:28:31,705 log 16492 40184 Internal Server Error: /admin/main/promo/add/
+Traceback (most recent call last):
+  File "D:\car_rental\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "D:\car_rental\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\car_rental\venv\Lib\site-packages\django\contrib\admin\options.py", line 714, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "D:\car_rental\venv\Lib\site-packages\django\utils\decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+  File "D:\car_rental\venv\Lib\site-packages\django\utils\decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "D:\car_rental\venv\Lib\site-packages\django\views\decorators\cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "D:\car_rental\venv\Lib\site-packages\django\contrib\admin\sites.py", line 240, in inner
+    return view(request, *args, **kwargs)
+  File "D:\car_rental\venv\Lib\site-packages\django\contrib\admin\options.py", line 1941, in add_view
+    return self.changeform_view(request, None, form_url, extra_context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\car_rental\venv\Lib\site-packages\django\utils\decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "D:\car_rental\venv\Lib\site-packages\django\utils\decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+  File "D:\car_rental\venv\Lib\site-packages\django\utils\decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "D:\car_rental\venv\Lib\site-packages\django\contrib\admin\options.py", line 1802, in changeform_view
+    return self._changeform_view(request, object_id, form_url, extra_context)
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\car_rental\venv\Lib\site-packages\django\contrib\admin\options.py", line 1847, in _changeform_view
+    form_validated = form.is_valid()
+  File "D:\car_rental\venv\Lib\site-packages\django\forms\forms.py", line 197, in is_valid
+    return self.is_bound and not self.errors
+                                 ^^^^^^^^^^^
+  File "D:\car_rental\venv\Lib\site-packages\django\forms\forms.py", line 192, in errors
+    self.full_clean()
+    ~~~~~~~~~~~~~~~^^
+  File "D:\car_rental\venv\Lib\site-packages\django\forms\forms.py", line 329, in full_clean
+    self._post_clean()
+    ~~~~~~~~~~~~~~~~^^
+  File "D:\car_rental\venv\Lib\site-packages\django\forms\models.py", line 495, in _post_clean
+    self.instance.full_clean(exclude=exclude, validate_unique=False)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\car_rental\venv\Lib\site-packages\django\db\models\base.py", line 1527, in full_clean
+    self.clean()
+    ~~~~~~~~~~^^
+  File "D:\car_rental\main\models.py", line 225, in clean
+    if self.valid_until <= self.valid_from:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: '<=' not supported between instances of 'NoneType' and 'datetime.datetime'
+ERROR 2025-09-14 20:28:31,719 basehttp 16492 40184 "POST /admin/main/promo/add/ HTTP/1.1" 500 148001
+INFO 2025-09-14 20:28:39,014 basehttp 16492 40184 "GET /admin/main/promo/add/ HTTP/1.1" 200 15764
+INFO 2025-09-14 20:28:42,185 basehttp 16492 40184 "POST /admin/main/promo/add/ HTTP/1.1" 302 0
+INFO 2025-09-14 20:28:42,313 basehttp 16492 40184 "GET /admin/main/promo/ HTTP/1.1" 200 15269
+INFO 2025-09-14 20:28:42,360 basehttp 16492 40184 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-09-14 20:28:47,060 basehttp 16492 40184 "GET / HTTP/1.1" 200 9190
+INFO 2025-09-14 20:28:51,637 basehttp 16492 40184 "GET /promos/ HTTP/1.1" 200 7373
+INFO 2025-09-14 20:28:59,464 basehttp 16492 40184 "GET /cars/ HTTP/1.1" 200 21950
+INFO 2025-09-14 20:29:04,730 basehttp 16492 40184 "GET /rentals/add/?car=7 HTTP/1.1" 200 11851
+INFO 2025-09-14 20:29:14,329 basehttp 16492 40184 "POST /rentals/add/?car=7 HTTP/1.1" 200 12237
+INFO 2025-09-14 20:29:25,589 basehttp 16492 40184 "POST /rentals/add/?car=7 HTTP/1.1" 200 12286
+INFO 2025-09-14 20:29:32,203 basehttp 16492 40184 "POST /rentals/add/?car=7 HTTP/1.1" 302 0
+INFO 2025-09-14 20:29:32,310 basehttp 16492 40184 "GET /rentals/ HTTP/1.1" 200 17136
+INFO 2025-09-14 20:29:49,519 basehttp 16492 40184 "GET /rentals/16/ HTTP/1.1" 200 10435
+INFO 2025-09-14 20:30:16,785 basehttp 16492 40184 "POST /rentals/16/cancel/ HTTP/1.1" 302 0
+INFO 2025-09-14 20:30:16,806 basehttp 16492 40184 "GET /rentals/16/ HTTP/1.1" 200 10264
+INFO 2025-09-14 20:30:18,900 basehttp 16492 40184 "GET /cars/ HTTP/1.1" 200 21950
+INFO 2025-09-14 20:30:21,822 basehttp 16492 40184 "GET /rentals/add/?car=2 HTTP/1.1" 200 11851
+INFO 2025-09-14 20:31:31,134 basehttp 16492 40184 "GET /contacts/ HTTP/1.1" 200 10387
+INFO 2025-09-14 20:44:49,118 basehttp 16492 51928 "GET /statistics/ HTTP/1.1" 200 80671
+INFO 2025-09-14 20:44:56,415 basehttp 16492 51928 "GET /rentals/ HTTP/1.1" 200 16831
+INFO 2025-09-14 20:44:58,640 basehttp 16492 51928 "GET /about/ HTTP/1.1" 200 8743
+INFO 2025-09-14 20:46:09,314 basehttp 16492 51928 "GET /rentals/ HTTP/1.1" 200 16831
